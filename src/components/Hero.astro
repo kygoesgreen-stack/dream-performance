@@ -3,7 +3,7 @@ import Button from '../ui/Button.astro';
 ---
 
 <section class="hero">
-  <video class="hero-video" autoplay loop muted playsinline>
+  <video class="hero-video" autoplay loop muted playsinline id="hero-video">
     <source src="/hero-video.mp4" type="video/mp4">
   </video>
   <div class="hero-overlay"></div>
@@ -191,3 +191,20 @@ import Button from '../ui/Button.astro';
     }
   }
 </style>
+
+<script>
+  const video = document.getElementById('hero-video');
+  
+  const playVideo = () => {
+    if (video) {
+      video.play().catch(() => {});
+    }
+  };
+  
+  if (video) {
+    video.play().catch(() => {
+      document.addEventListener('touchstart', playVideo, { once: true });
+      document.addEventListener('click', playVideo, { once: true });
+    });
+  }
+</script>
