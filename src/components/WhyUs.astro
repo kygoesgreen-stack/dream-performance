@@ -1,0 +1,137 @@
+---
+---
+
+<section id="why-us" class="why-us section-padding">
+  <div class="container">
+    <span class="eyebrow">WHY US</span>
+    <h2 class="headline">The shop your friend tells you about.</h2>
+    
+    <div class="pillars-grid">
+      <article class="pillar">
+        <span class="pillar-number">01</span>
+        <h3 class="pillar-title">Honest pricing</h3>
+        <p class="pillar-text">We quote what the job costs. No surprise add-ons, no padded labor hours. If you don't need it, we won't sell it.</p>
+      </article>
+      
+      <article class="pillar">
+        <span class="pillar-number">02</span>
+        <h3 class="pillar-title">Family-run</h3>
+        <p class="pillar-text">Owned and operated by Jose and Kelly. Same people who answer the phone do the work. Same people stand behind it.</p>
+      </article>
+      
+      <article class="pillar">
+        <span class="pillar-number">03</span>
+        <h3 class="pillar-title">Fast turnaround</h3>
+        <p class="pillar-text">Most jobs done same-day. Brakes in a few hours. We respect your schedule because we know you need your car back.</p>
+      </article>
+      
+      <article class="pillar">
+        <span class="pillar-number">04</span>
+        <h3 class="pillar-title">Bilingual</h3>
+        <p class="pillar-text">English y español. Walk in and talk to someone who speaks your language.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .why-us {
+    background-color: var(--bg-elevated);
+  }
+  
+  .eyebrow {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  
+  .headline {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 4rem;
+  }
+  
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+  
+  .pillar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .pillar-number {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  
+  .pillar-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  
+  .pillar-text {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  
+  @media (max-width: 1024px) {
+    .pillars-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2.5rem;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .pillars-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const pillars = entry.target.querySelectorAll('.pillar');
+        pillars.forEach((pillar, index) => {
+          setTimeout(() => {
+            (pillar as HTMLElement).style.opacity = '1';
+            (pillar as HTMLElement).style.transform = 'translateY(0)';
+          }, index * 100);
+        });
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.pillars-grid').forEach(el => {
+    const pillars = el.querySelectorAll('.pillar');
+    pillars.forEach((pillar) => {
+      (pillar as HTMLElement).style.opacity = '0';
+      (pillar as HTMLElement).style.transform = 'translateY(20px)';
+      (pillar as HTMLElement).style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    });
+    observer.observe(el);
+  });
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) {
+    document.querySelectorAll('.pillar').forEach(el => {
+      (el as HTMLElement).style.opacity = '1';
+      (el as HTMLElement).style.transform = 'none';
+    });
+  }
+</script>

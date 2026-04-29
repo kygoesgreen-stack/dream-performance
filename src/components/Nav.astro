@@ -1,0 +1,200 @@
+---
+import Button from '../ui/Button.astro';
+
+const navLinks = [
+  { href: '#services', label: 'Services' },
+  { href: '#reviews', label: 'Reviews' },
+  { href: '#location', label: 'Location' },
+];
+---
+
+<nav class="nav" id="nav">
+  <div class="nav-inner container">
+    <a href="/" class="logo">
+      DREAM PERFORMANCE
+    </a>
+    
+    <div class="nav-links hide-mobile">
+      {navLinks.map(link => (
+        <a href={link.href} class="nav-link">{link.label}</a>
+      ))}
+      <Button href="tel:18594147088" variant="primary" class="nav-cta">
+        Call (859) 414-7088
+      </Button>
+    </div>
+    
+    <button class="mobile-menu-toggle hide-desktop" aria-label="Open menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu hide-desktop">
+  <button class="mobile-menu-close" aria-label="Close menu">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+  
+  <div class="mobile-menu-links">
+    {navLinks.map(link => (
+      <a href={link.href} class="mobile-menu-link">{link.label}</a>
+    ))}
+    <Button href="tel:18594147088" variant="primary" class="mobile-menu-cta">
+      Call (859) 414-7088
+    </Button>
+  </div>
+</div>
+
+<style>
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    height: 80px;
+    transition: height 0.25s ease, background-color 0.25s ease, backdrop-filter 0.25s ease;
+  }
+  
+  .nav.scrolled {
+    height: 64px;
+    background-color: rgba(10, 10, 11, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    animation: slideDown 0.5s ease 0.1s both;
+  }
+  
+  .logo {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 1.125rem;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    text-decoration: none;
+  }
+  
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  
+  .nav-link {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  
+  .nav-link:hover {
+    color: var(--text);
+  }
+  
+  .nav-cta {
+    font-size: 0.875rem;
+    padding: 0.625rem 1.1255rem;
+  }
+  
+  .mobile-menu-toggle {
+    background: none;
+    border: none;
+    color: var(--text);
+    cursor: pointer;
+    padding: 8px;
+  }
+  
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background-color: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  
+  .mobile-menu.open {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .mobile-menu-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    color: var(--text);
+    cursor: pointer;
+    padding: 8px;
+  }
+  
+  .mobile-menu-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  
+  .mobile-menu-link {
+    font-size: 1.5rem;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .mobile-menu-cta {
+    margin-top: 1rem;
+  }
+</style>
+
+<script>
+  const nav = document.getElementById('nav');
+  const toggle = document.querySelector('.mobile-menu-toggle');
+  const closeBtn = document.querySelector('.mobile-menu-close');
+  const mobileMenu = document.querySelector('.mobile-menu');
+  const mobileLinks = document.querySelectorAll('.mobile-menu-link, .mobile-menu-cta');
+  
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 100) {
+      nav?.classList.add('scrolled');
+    } else {
+      nav?.classList.remove('scrolled');
+    }
+  });
+  
+  toggle?.addEventListener('click', () => {
+    mobileMenu?.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    toggle.setAttribute('aria-expanded', 'true');
+  });
+  
+  const closeMenu = () => {
+    mobileMenu?.classList.remove('open');
+    document.body.style.overflow = '';
+    toggle?.setAttribute('aria-expanded', 'false');
+  };
+  
+  closeBtn?.addEventListener('click', closeMenu);
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+</script>

@@ -1,0 +1,64 @@
+---
+interface Props {
+  delay?: number;
+  stagger?: number;
+  direction?: 'up' | 'left' | 'right';
+  class?: string;
+}
+
+const { 
+  delay = 0, 
+  stagger = 0,
+  direction = 'up',
+  class: className = ''
+} = Astro.props;
+
+const getInitialStyle = () => {
+  switch (direction) {
+    case 'up': return { opacity: 0, transform: 'translateY(24px)' };
+    case 'left': return { opacity: 0, transform: 'translateX(-24px)' };
+    case 'right': return { opacity: 0, transform: 'translateX(24px)' };
+  }
+};
+---
+
+<div 
+  class:list={["reveal-on-scroll", className]}
+  data-delay={delay}
+  data-stagger={stagger}
+  style={getInitialStyle()}
+>
+  <slot />
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const el = entry.target as HTMLElement;
+        const delay = parseInt(el.dataset.delay || '0');
+        const stagger = parseInt(el.dataset.stagger || '0');
+        
+        setTimeout(() => {
+          el.style.transition = 'opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)';
+          el.style.opacity = '1';
+          el.style.transform = 'translate(0, 0)';
+        }, stagger);
+        
+        observer.unobserve(el);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+    observer.observe(el);
+  });
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) {
+    document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+      (el as HTMLElement).style.opacity = '1';
+      (el as HTMLElement).style.transform = 'none';
+    });
+  }
+</script>

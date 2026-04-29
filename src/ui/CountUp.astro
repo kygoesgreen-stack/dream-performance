@@ -1,0 +1,73 @@
+---
+interface Props {
+  end: number;
+  suffix?: string;
+  duration?: number;
+  class?: string;
+}
+
+const { end, suffix = '', duration = 1200, class: className = '' } = Astro.props;
+---
+
+<span 
+  class:list={["count-up", className]} 
+  data-end={end}
+  data-duration={duration}
+  data-suffix={suffix}
+>
+  0{suffix}
+</span>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const el = entry.target as HTMLElement;
+        const endValue = parseFloat(el.dataset.end || '0');
+        const duration = parseInt(el.dataset.duration || '1200');
+        const suffix = el.dataset.suffix || '';
+        const isDecimal = endValue % 1 !== 0;
+        
+        const startTime = performance.now();
+        
+        const animate = (currentTime: number) => {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const easeOut = 1 - Math.pow(1 - progress, 4);
+          
+          const currentValue = endValue * easeOut;
+          el.textContent = (isDecimal ? currentValue.toFixed(1) : Math.floor(currentValue).toString()) + suffix;
+          
+          if (progress < 1) {
+            requestAnimationFrame(animate);
+          } else {
+            el.textContent = (isDecimal ? endValue.toFixed(1) : endValue.toString()) + suffix;
+          }
+        };
+        
+        requestAnimationFrame(animate);
+        observer.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('.count-up').forEach(el => {
+    observer.observe(el);
+  });
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) {
+    document.querySelectorAll('.count-up').forEach(el => {
+      const endValue = parseFloat((el as HTMLElement).dataset.end || '0');
+      const suffix = (el as HTMLElement).dataset.suffix || '';
+      const isDecimal = endValue % 1 !== 0;
+      el.textContent = (isDecimal ? endValue.toFixed(1) : endValue.toString()) + suffix;
+    });
+  }
+</script>
+
+<style>
+  .count-up {
+    font-variant-numeric: tabular-nums;
+  }
+</style>

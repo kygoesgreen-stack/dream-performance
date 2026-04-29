@@ -1,0 +1,110 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '../styles/global.css';
+import '@fontsource/geist/400.css';
+import '@fontsource/geist/500.css';
+import '@fontsource/geist/600.css';
+import '@fontsource/geist/700.css';
+import '@fontsource/geist-mono/400.css';
+import '@fontsource/geist-mono/500.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { 
+  title, 
+  description = "Family-owned auto repair shop in Covington, KY. Brakes, suspension, engine repair, foreign and domestic. Honest pricing, no upsells. Call (859) 414-7088." 
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content={description}>
+  <title>{title}</title>
+  
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  
+  <ClientRouter />
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AutoRepair",
+    "name": "Dream Performance Vehicle Repair",
+    "image": "https://dreamperformance.com/og-image.jpg",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "501 Highland Pike",
+      "addressLocality": "Covington",
+      "addressRegion": "KY",
+      "postalCode": "41014",
+      "addressCountry": "US"
+    },
+    "telephone": "+18594147088",
+    "url": "https://dreamperformance.com",
+    "priceRange": "$$",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.7",
+      "reviewCount": "37"
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "opens": "08:00",
+        "closes": "18:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Saturday"],
+        "opens": "00:00",
+        "closes": "00:00",
+        "description": "By appointment"
+      }
+    ],
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "39.0837",
+      "longitude": "-84.5086"
+    }
+  }
+  </script>
+</head>
+<body>
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:bg-accent focus:text-black focus:p-4 focus:z-50">
+    Skip to content
+  </a>
+  <slot />
+</body>
+</html>
+
+<style is:global>
+  :root {
+    --bg: #0a0a0b;
+    --bg-elevated: #131316;
+    --bg-card: #1a1a1f;
+    --border: #2a2a30;
+    --border-hover: #3d3d45;
+    --text: #f5f5f7;
+    --text-muted: #a1a1aa;
+    --text-dim: #71717a;
+    --accent: #ff5722;
+    --accent-hover: #ff6b3d;
+    --accent-glow: rgba(255, 87, 34, 0.4);
+    --success: #4ade80;
+    --font-sans: 'Geist', system-ui, sans-serif;
+    --font-mono: 'Geist Mono', monospace;
+  }
+</style>
