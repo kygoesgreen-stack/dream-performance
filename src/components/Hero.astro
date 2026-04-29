@@ -194,6 +194,8 @@ import Button from '../ui/Button.astro';
 <script>
   const video = document.getElementById('hero-video');
   if (video) {
-    video.play().catch(() => {});
+    video.play().catch(() => {
+      window.addEventListener('load', () => video.play().catch(() => {}));
+    });
   }
 </script>
