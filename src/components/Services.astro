@@ -67,6 +67,27 @@ const services = [
   </div>
 </section>
 
+<section id="services" class="services section-padding">
+  <div class="container">
+    <span class="eyebrow">WHAT WE DO</span>
+    <h2 class="headline">Full-service repair. Domestic and foreign.</h2>
+    
+    <div class="services-grid">
+      {services.map((service, index) => (
+        <div class="service-item" style={`animation-delay: ${index * 80}ms`}>
+          <Card hoverable={true}>
+            <div class="service-icon">
+              <service.icon size={28} />
+            </div>
+            <h3 class="service-title">{service.title}</h3>
+            <p class="service-description">{service.description}</p>
+          </Card>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
 <style>
   .services {
     background-color: var(--bg);
@@ -116,10 +137,6 @@ const services = [
     color: var(--text-muted);
     margin-bottom: 1rem;
     transition: transform 0.25s ease-out, color 0.25s ease-out;
-  }
-  
-  :global(.service-card:hover) .service-icon {
-    color: var(--accent);
   }
   
   .service-title {

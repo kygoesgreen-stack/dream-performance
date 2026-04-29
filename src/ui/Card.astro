@@ -7,29 +7,23 @@ interface Props {
 const { class: className = '', hoverable = false } = Astro.props;
 ---
 
-<div 
-  class:list={[
-    "bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-6",
-    hoverable && "service-card",
-    className
-  ]}
->
+<div class:list={["card", hoverable && "card-hover", className]}>
   <slot />
 </div>
 
 <style>
-  .service-card {
-    transition: transform 0.25s ease-out, border-color 0.25s ease-out, box-shadow 0.25s ease-out;
+  .card {
+    background-color: var(--bg-card);
+    border-radius: 12px;
+    padding: 1.5rem;
   }
   
-  .service-card:hover {
+  .card-hover {
+    transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+  }
+  
+  .card-hover:hover {
     transform: translateY(-4px);
-    border-color: var(--border-hover);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--border-hover) inset;
-  }
-  
-  .service-card:hover :global(.card-icon) {
-    transform: scale(1.1);
-    color: var(--accent);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
   }
 </style>
